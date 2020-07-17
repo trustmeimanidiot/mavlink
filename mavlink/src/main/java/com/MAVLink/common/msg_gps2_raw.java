@@ -16,7 +16,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
 public class msg_gps2_raw extends MAVLinkMessage{
 
     public static final int MAVLINK_MSG_ID_GPS2_RAW = 124;
-    public static final int MAVLINK_MSG_LENGTH = 35;
+    public static final int MAVLINK_MSG_LENGTH = 37;
     private static final long serialVersionUID = MAVLINK_MSG_ID_GPS2_RAW;
 
 
@@ -80,6 +80,11 @@ public class msg_gps2_raw extends MAVLinkMessage{
     * Number of DGPS satellites
     */
     public short dgps_numch;
+      
+    /**
+    * Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use 65535 if this GPS is configured to provide yaw and is currently unable to provide it. Use 36000 for north.
+    */
+    public int yaw;
     
 
     /**
@@ -115,6 +120,8 @@ public class msg_gps2_raw extends MAVLinkMessage{
         packet.payload.putUnsignedByte(satellites_visible);
               
         packet.payload.putUnsignedByte(dgps_numch);
+              
+        packet.payload.putUnsignedShort(yaw);
         
         return packet;
     }
@@ -150,6 +157,8 @@ public class msg_gps2_raw extends MAVLinkMessage{
         this.satellites_visible = payload.getUnsignedByte();
               
         this.dgps_numch = payload.getUnsignedByte();
+              
+        this.yaw = payload.getUnsignedShort();
         
     }
 
@@ -172,12 +181,12 @@ public class msg_gps2_raw extends MAVLinkMessage{
         unpack(mavLinkPacket.payload);        
     }
 
-                            
+                              
     /**
     * Returns a string with the MSG name and data
     */
     public String toString(){
-        return "MAVLINK_MSG_ID_GPS2_RAW - sysid:"+sysid+" compid:"+compid+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" dgps_age:"+dgps_age+" eph:"+eph+" epv:"+epv+" vel:"+vel+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+" dgps_numch:"+dgps_numch+"";
+        return "MAVLINK_MSG_ID_GPS2_RAW - sysid:"+sysid+" compid:"+compid+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" dgps_age:"+dgps_age+" eph:"+eph+" epv:"+epv+" vel:"+vel+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+" dgps_numch:"+dgps_numch+" yaw:"+yaw+"";
     }
 }
         

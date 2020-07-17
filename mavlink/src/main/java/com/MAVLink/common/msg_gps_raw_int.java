@@ -17,7 +17,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
 public class msg_gps_raw_int extends MAVLinkMessage{
 
     public static final int MAVLINK_MSG_ID_GPS_RAW_INT = 24;
-    public static final int MAVLINK_MSG_LENGTH = 30;
+    public static final int MAVLINK_MSG_LENGTH = 52;
     private static final long serialVersionUID = MAVLINK_MSG_ID_GPS_RAW_INT;
 
 
@@ -71,6 +71,36 @@ public class msg_gps_raw_int extends MAVLinkMessage{
     * Number of satellites visible. If unknown, set to 255
     */
     public short satellites_visible;
+      
+    /**
+    * Altitude (above WGS84, EGM96 ellipsoid). Positive for up.
+    */
+    public int alt_ellipsoid;
+      
+    /**
+    * Position uncertainty.
+    */
+    public long h_acc;
+      
+    /**
+    * Altitude uncertainty.
+    */
+    public long v_acc;
+      
+    /**
+    * Speed uncertainty.
+    */
+    public long vel_acc;
+      
+    /**
+    * Heading / track uncertainty
+    */
+    public long hdg_acc;
+      
+    /**
+    * Yaw in earth frame from north. Use 0 if this GPS does not provide yaw. Use 65535 if this GPS is configured to provide yaw and is currently unable to provide it. Use 36000 for north.
+    */
+    public int yaw;
     
 
     /**
@@ -102,6 +132,18 @@ public class msg_gps_raw_int extends MAVLinkMessage{
         packet.payload.putUnsignedByte(fix_type);
               
         packet.payload.putUnsignedByte(satellites_visible);
+              
+        packet.payload.putInt(alt_ellipsoid);
+              
+        packet.payload.putUnsignedInt(h_acc);
+              
+        packet.payload.putUnsignedInt(v_acc);
+              
+        packet.payload.putUnsignedInt(vel_acc);
+              
+        packet.payload.putUnsignedInt(hdg_acc);
+              
+        packet.payload.putUnsignedShort(yaw);
         
         return packet;
     }
@@ -133,6 +175,18 @@ public class msg_gps_raw_int extends MAVLinkMessage{
         this.fix_type = payload.getUnsignedByte();
               
         this.satellites_visible = payload.getUnsignedByte();
+              
+        this.alt_ellipsoid = payload.getInt();
+              
+        this.h_acc = payload.getUnsignedInt();
+              
+        this.v_acc = payload.getUnsignedInt();
+              
+        this.vel_acc = payload.getUnsignedInt();
+              
+        this.hdg_acc = payload.getUnsignedInt();
+              
+        this.yaw = payload.getUnsignedShort();
         
     }
 
@@ -155,12 +209,12 @@ public class msg_gps_raw_int extends MAVLinkMessage{
         unpack(mavLinkPacket.payload);        
     }
 
-                        
+                                    
     /**
     * Returns a string with the MSG name and data
     */
     public String toString(){
-        return "MAVLINK_MSG_ID_GPS_RAW_INT - sysid:"+sysid+" compid:"+compid+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" eph:"+eph+" epv:"+epv+" vel:"+vel+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+"";
+        return "MAVLINK_MSG_ID_GPS_RAW_INT - sysid:"+sysid+" compid:"+compid+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" eph:"+eph+" epv:"+epv+" vel:"+vel+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+" alt_ellipsoid:"+alt_ellipsoid+" h_acc:"+h_acc+" v_acc:"+v_acc+" vel_acc:"+vel_acc+" hdg_acc:"+hdg_acc+" yaw:"+yaw+"";
     }
 }
         

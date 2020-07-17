@@ -16,7 +16,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
 public class msg_battery_status extends MAVLinkMessage{
 
     public static final int MAVLINK_MSG_ID_BATTERY_STATUS = 147;
-    public static final int MAVLINK_MSG_LENGTH = 36;
+    public static final int MAVLINK_MSG_LENGTH = 49;
     private static final long serialVersionUID = MAVLINK_MSG_ID_BATTERY_STATUS;
 
 
@@ -65,6 +65,21 @@ public class msg_battery_status extends MAVLinkMessage{
     * Remaining battery energy. Values: [0-100], -1: autopilot does not estimate the remaining battery.
     */
     public byte battery_remaining;
+      
+    /**
+    * Remaining battery time, 0: autopilot does not provide remaining battery time estimate
+    */
+    public int time_remaining;
+      
+    /**
+    * State for extent of discharge, provided by autopilot for warning or external reactions
+    */
+    public short charge_state;
+      
+    /**
+    * Battery voltages for cells 11 to 14. Cells above the valid cell count for this battery should have a value of 0, where zero indicates not supported (note, this is different than for the voltages field and allows empty byte truncation). If the measured value is 0 then 1 should be sent instead.
+    */
+    public int voltages_ext[] = new int[4];
     
 
     /**
@@ -98,6 +113,16 @@ public class msg_battery_status extends MAVLinkMessage{
         packet.payload.putUnsignedByte(type);
               
         packet.payload.putByte(battery_remaining);
+              
+        packet.payload.putInt(time_remaining);
+              
+        packet.payload.putUnsignedByte(charge_state);
+              
+        
+        for (int i = 0; i < voltages_ext.length; i++) {
+            packet.payload.putUnsignedShort(voltages_ext[i]);
+        }
+                    
         
         return packet;
     }
@@ -131,6 +156,16 @@ public class msg_battery_status extends MAVLinkMessage{
         this.type = payload.getUnsignedByte();
               
         this.battery_remaining = payload.getByte();
+              
+        this.time_remaining = payload.getInt();
+              
+        this.charge_state = payload.getUnsignedByte();
+              
+         
+        for (int i = 0; i < this.voltages_ext.length; i++) {
+            this.voltages_ext[i] = payload.getUnsignedShort();
+        }
+                
         
     }
 
@@ -153,12 +188,12 @@ public class msg_battery_status extends MAVLinkMessage{
         unpack(mavLinkPacket.payload);        
     }
 
-                      
+                            
     /**
     * Returns a string with the MSG name and data
     */
     public String toString(){
-        return "MAVLINK_MSG_ID_BATTERY_STATUS - sysid:"+sysid+" compid:"+compid+" current_consumed:"+current_consumed+" energy_consumed:"+energy_consumed+" temperature:"+temperature+" voltages:"+voltages+" current_battery:"+current_battery+" id:"+id+" battery_function:"+battery_function+" type:"+type+" battery_remaining:"+battery_remaining+"";
+        return "MAVLINK_MSG_ID_BATTERY_STATUS - sysid:"+sysid+" compid:"+compid+" current_consumed:"+current_consumed+" energy_consumed:"+energy_consumed+" temperature:"+temperature+" voltages:"+voltages+" current_battery:"+current_battery+" id:"+id+" battery_function:"+battery_function+" type:"+type+" battery_remaining:"+battery_remaining+" time_remaining:"+time_remaining+" charge_state:"+charge_state+" voltages_ext:"+voltages_ext+"";
     }
 }
         

@@ -16,7 +16,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
 public class msg_statustext extends MAVLinkMessage{
 
     public static final int MAVLINK_MSG_ID_STATUSTEXT = 253;
-    public static final int MAVLINK_MSG_LENGTH = 51;
+    public static final int MAVLINK_MSG_LENGTH = 54;
     private static final long serialVersionUID = MAVLINK_MSG_ID_STATUSTEXT;
 
 
@@ -30,6 +30,16 @@ public class msg_statustext extends MAVLinkMessage{
     * Status text message, without null termination character
     */
     public byte text[] = new byte[50];
+      
+    /**
+    * Unique (opaque) identifier for this statustext message.  May be used to reassemble a logical long-statustext message from a sequence of chunks.  A value of zero indicates this is the only chunk in the sequence and the message can be emitted immediately.
+    */
+    public int id;
+      
+    /**
+    * This chunk's sequence number; indexing is from zero.  Any null character in the text field is taken to mean this was the last chunk.
+    */
+    public short chunk_seq;
     
 
     /**
@@ -49,6 +59,10 @@ public class msg_statustext extends MAVLinkMessage{
             packet.payload.putByte(text[i]);
         }
                     
+              
+        packet.payload.putUnsignedShort(id);
+              
+        packet.payload.putUnsignedByte(chunk_seq);
         
         return packet;
     }
@@ -68,6 +82,10 @@ public class msg_statustext extends MAVLinkMessage{
             this.text[i] = payload.getByte();
         }
                 
+              
+        this.id = payload.getUnsignedShort();
+              
+        this.chunk_seq = payload.getUnsignedByte();
         
     }
 
@@ -119,12 +137,12 @@ public class msg_statustext extends MAVLinkMessage{
         return buf.toString();
 
     }
-                         
+                             
     /**
     * Returns a string with the MSG name and data
     */
     public String toString(){
-        return "MAVLINK_MSG_ID_STATUSTEXT - sysid:"+sysid+" compid:"+compid+" severity:"+severity+" text:"+text+"";
+        return "MAVLINK_MSG_ID_STATUSTEXT - sysid:"+sysid+" compid:"+compid+" severity:"+severity+" text:"+text+" id:"+id+" chunk_seq:"+chunk_seq+"";
     }
 }
         

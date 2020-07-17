@@ -17,7 +17,7 @@ import com.MAVLink.Messages.MAVLinkPayload;
 public class msg_hil_gps extends MAVLinkMessage{
 
     public static final int MAVLINK_MSG_ID_HIL_GPS = 113;
-    public static final int MAVLINK_MSG_LENGTH = 36;
+    public static final int MAVLINK_MSG_LENGTH = 37;
     private static final long serialVersionUID = MAVLINK_MSG_ID_HIL_GPS;
 
 
@@ -86,6 +86,11 @@ public class msg_hil_gps extends MAVLinkMessage{
     * Number of satellites visible. If unknown, set to 255
     */
     public short satellites_visible;
+      
+    /**
+    * GPS ID (zero indexed). Used for multiple GPS inputs
+    */
+    public short id;
     
 
     /**
@@ -123,6 +128,8 @@ public class msg_hil_gps extends MAVLinkMessage{
         packet.payload.putUnsignedByte(fix_type);
               
         packet.payload.putUnsignedByte(satellites_visible);
+              
+        packet.payload.putUnsignedByte(id);
         
         return packet;
     }
@@ -160,6 +167,8 @@ public class msg_hil_gps extends MAVLinkMessage{
         this.fix_type = payload.getUnsignedByte();
               
         this.satellites_visible = payload.getUnsignedByte();
+              
+        this.id = payload.getUnsignedByte();
         
     }
 
@@ -182,12 +191,12 @@ public class msg_hil_gps extends MAVLinkMessage{
         unpack(mavLinkPacket.payload);        
     }
 
-                              
+                                
     /**
     * Returns a string with the MSG name and data
     */
     public String toString(){
-        return "MAVLINK_MSG_ID_HIL_GPS - sysid:"+sysid+" compid:"+compid+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" eph:"+eph+" epv:"+epv+" vel:"+vel+" vn:"+vn+" ve:"+ve+" vd:"+vd+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+"";
+        return "MAVLINK_MSG_ID_HIL_GPS - sysid:"+sysid+" compid:"+compid+" time_usec:"+time_usec+" lat:"+lat+" lon:"+lon+" alt:"+alt+" eph:"+eph+" epv:"+epv+" vel:"+vel+" vn:"+vn+" ve:"+ve+" vd:"+vd+" cog:"+cog+" fix_type:"+fix_type+" satellites_visible:"+satellites_visible+" id:"+id+"";
     }
 }
         

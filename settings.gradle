@@ -1,0 +1,2 @@
+include ':mavlink'
+rootProject.name = "mavlink-ardupilotmega"

@@ -1,7 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven'
 apply plugin: 'maven-publish'
+apply plugin: 'com.github.dcendents.android-maven'
 
+group = 'com.gitlab.redlightning'
 def artifactId = 'ardupilotmega'
 def groupId = 'net.redlightning.mavlink'
 
